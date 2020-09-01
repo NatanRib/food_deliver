@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/app/controller/details_controller.dart';
 import 'package:get/get.dart';
 import 'package:food_delivery/app/ui/android/home/widgets/home_widgets.dart';
-import 'package:food_delivery/app/controller/chart_controller.dart';
+import 'package:food_delivery/app/controller/cart_controller.dart';
 import 'package:food_delivery/app/controller/category_controller.dart';
 import 'package:food_delivery/app/controller/item_controller.dart';
 import 'package:food_delivery/app/data/repository/category_repository.dart';
-import 'package:food_delivery/app/data/repository/chart_repository.dart';
+import 'package:food_delivery/app/data/repository/cart_repository.dart';
 import 'package:food_delivery/app/data/repository/item_repository.dart';
 
 class HomePage extends StatelessWidget {
   final homeWidgets = Get.put(HomeWidgets());
-  final chartController = Get.put(ChartController(repository: ChartRepository()));
+  final cartController = Get.put(CartController(repository: CartRepository()));
   final categoryController = Get.put(CategoryController(repository: CategoryRepository()));
   final itemController = Get.put(ItemController(repository: ItemRepository()));
 
@@ -21,7 +22,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           child: ListView(
             children: [
-              Row(
+              Row( //cabeçalho
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
@@ -30,13 +31,13 @@ class HomePage extends StatelessWidget {
                   ),
                   Obx(()=> Container(
                     padding: const EdgeInsets.only(top: 10, right: 10),
-                    child: homeWidgets.shoppingChart(chartController.chart),
+                    child: homeWidgets.shoppingChart(cartController.cart),
                     height: Get.height * 0.13,
                     width: 100,
                   ))
                 ],
               ),
-              Padding(
+              Padding(//search
                 padding: const EdgeInsets.only(top:20, left: 10, right: 10),
                 child: homeWidgets.searchTextField(),
               ),
@@ -46,13 +47,14 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
                       child: SizedBox(
-                        height: Get.height/7,
+                        height: Get.height/6,
                         width: Get.width,
-                        child: ListView.builder(
+                        child: ListView.builder( //categorias
                           scrollDirection: Axis.horizontal,
                           itemCount: categoryController.categories.length,
                           itemBuilder: (context, index){
                             return Row(
+                              mainAxisSize: MainAxisSize.max,
                               children: [
                                 GestureDetector(
                                   onTap: () {
@@ -66,7 +68,7 @@ class HomePage extends StatelessWidget {
                                       true : false)
                                   
                                 ),
-                                Container(width: 5,)
+                                Container(width: 10,)
                               ],
                             );
                           }
@@ -82,26 +84,30 @@ class HomePage extends StatelessWidget {
               ),
               Obx(() { 
                 return Container(
-                  height: (itemController.selectedItems.length % 2 == 1 ?
-                    (itemController.selectedItems.length / 2 * 190) + 190 : 
-                      itemController.selectedItems.length / 2 * 222 ).toDouble(),
+                  height: Get.height * 0.74,
                   width: Get.width,
                   padding: const EdgeInsets.only(top: 10.0),
-                  child: IgnorePointer(
-                    child: GridView.count(
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                      children: List<Widget>.generate(
-                        itemController.selectedItems.length, 
-                        (index) => homeWidgets.cardItem(itemController.selectedItems[index])),
+                  child: GridView.count(
+                    physics: ScrollPhysics(),
+                    childAspectRatio: 0.7,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    children: List<Widget>.generate(
+                      itemController.selectedItems.length, 
+                      (index) => GestureDetector(
+                        onTap: () {
+                          final detailsController = Get.put(DetailsController(
+                            itemController.selectedItems[index]
+                          ));
+                          Get.toNamed('/details', arguments: detailsController);},
+                        child: homeWidgets.cardItem(itemController.selectedItems[index]),
+                      )
                     ),
                   ),  
                 );
-              }
-              ) 
+              }) 
             ],
           ),
         ),

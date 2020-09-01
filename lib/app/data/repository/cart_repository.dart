@@ -1,13 +1,13 @@
 //import 'package:meta/meta.dart';
-import 'package:food_delivery/app/data/model/chart.dart';
+import 'package:food_delivery/app/data/model/cart.dart';
 
-class ChartRepository {
+class CartRepository {
 
 //final MyApiClient apiClient;
 
 //ChartRepository({@required this.apiClient}) : assert(apiClient != null);
 
-Chart _chart = Chart(4);
+Cart _chart = Cart(0);
 
 getAll(){
   return _chart;

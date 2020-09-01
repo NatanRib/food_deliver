@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/app/data/model/category.dart';
-import 'package:food_delivery/app/data/model/chart.dart';
+import 'package:food_delivery/app/data/model/cart.dart';
 import 'package:food_delivery/app/data/model/item.dart';
 import 'package:get/get.dart';
 
 class HomeWidgets{
 
-  Widget shoppingChart(Chart c){
+  Widget shoppingChart(Cart c){
     return Container(
       decoration: BoxDecoration(
         color: Get.theme.accentColor,
@@ -62,8 +62,17 @@ class HomeWidgets{
 
   Widget cardIcon(Category cat/*IconData icon*/, bool selected){
     return Container(
+      height: 70,
       width: 100,
       decoration: BoxDecoration(
+        boxShadow: selected ? [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 4,
+            spreadRadius: 2,
+            offset: Offset(0, 0)
+          )
+        ] : [],
         borderRadius: BorderRadius.circular(20),
         color: selected ? Colors.black :Get.theme.backgroundColor,
       ),
@@ -107,9 +116,13 @@ class HomeWidgets{
               fontSize: 16
             ),
           ),
+          Image(image: AssetImage(i.urlImage),
+            height: 100,
+            alignment: Alignment.center,
+          ),
           Text('R\$ ' +i.price.toString(),
             style: TextStyle(
-              color: Colors.green[800]
+              color: Get.theme.accentColor
             ),
           )
         ]
