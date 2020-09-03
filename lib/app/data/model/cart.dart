@@ -1,5 +1,7 @@
-class Cart{
-  int items;
+import 'package:food_delivery/app/data/model/item.dart';
 
-  Cart(this.items);
+class Cart{
+  List<Item> items = [];
+
+  Cart();
 }

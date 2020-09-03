@@ -23,30 +23,31 @@ class DetailsWidgets{
     );
   }
 
-  Widget shoppingCart(Function f, Cart cart){
-    return GestureDetector(
-      onTap: () => f,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Get.theme.accentColor,
-        ),  
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.shopping_cart,
-              color: Colors.white,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 5.0),
-              child: Text(cart.items.toString(),
-                style: TextStyle(
-                  color: Colors.white
-                ),
+  Widget shoppingCart(Cart cart){
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Get.theme.accentColor,
+      ),  
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.shopping_cart,
+            color: Colors.white,
+          ),
+          cart.items == null?
+            Container() :
+            cart.items.length <= 0 ?
+            Container() :
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Text(cart.items.length.toString(),
+              style: TextStyle(
+                color: Colors.white
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -114,25 +115,18 @@ class DetailsWidgets{
 
   Widget cardItems(Item i, bool selected){
     return Container(
-      height: 100,
-      width: 100,
-      decoration: BoxDecoration(
+      height: 70,
+      width: 70,
+      child: Material(
         borderRadius: BorderRadius.circular(20),
-        boxShadow: selected ? [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 4,
-            spreadRadius: 2,
-            offset: Offset(0, 0)
-          )
-        ] : [],
-        color: selected ? Colors.black : Get.theme.backgroundColor
-      ),
-      child: Center(
-        child: Text(i.name,
-        textAlign: TextAlign.center,
-          style: TextStyle(
-            color: selected ? Colors.white : Colors.black
+        color: selected? Colors.black : Get.theme.backgroundColor,
+        elevation: selected ? 10 : 0,
+        child: Center(
+          child: Text(i.name,
+          textAlign: TextAlign.center,
+            style: TextStyle(
+              color: selected ? Colors.white : Colors.black
+            ),
           ),
         ),
       ),

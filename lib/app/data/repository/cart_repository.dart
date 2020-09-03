@@ -1,5 +1,6 @@
 //import 'package:meta/meta.dart';
 import 'package:food_delivery/app/data/model/cart.dart';
+import 'package:food_delivery/app/data/model/item.dart';
 
 class CartRepository {
 
@@ -7,11 +8,23 @@ class CartRepository {
 
 //ChartRepository({@required this.apiClient}) : assert(apiClient != null);
 
-Cart _chart = Cart(0);
+  Cart _cart = Cart();
 
-getAll(){
-  return _chart;
-}
+  add(Item i){
+    _cart.items.add(i);
+  }
+
+  addOne(index){
+    _cart.items[index].qtd += 1;  
+  }
+
+  removeOne(index){
+    _cart.items[index].qtd -= 1;  
+  }
+
+  getAll(){
+    return _cart;
+  }
 // getId(id){
 //   return apiClient.getId(id);
 // }

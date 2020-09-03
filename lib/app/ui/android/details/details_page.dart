@@ -12,99 +12,111 @@ class DetaisPage extends StatelessWidget {
   final detailsWidgets = Get.put(DetailsWidgets());
   final itemController = Get.put(ItemController(repository: ItemRepository()));
   final cartController = Get.put(CartController(repository: CartRepository()));
-  
+  final detailsController = Get.put(DetailsController(Get.arguments));
+
   DetaisPage();
-  final DetailsController detailsController = Get.arguments;
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              width: Get.width,
-              child: Stack( //cabecalho
-                // mainAxisSize: MainAxisSize.max,
-                // mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only( top: 10.0, left: 10.0),
-                    child: detailsWidgets.backButton((){ 
-                      Get.delete<DetailsController>();
-                      Get.back();
-                      //Get.offAndToNamed('/');
-                    }),
-                  ),
-                  Positioned(
-                    top: Get.height * 0.05,
-                    left: Get.width * 0.40,
-                    child: detailsWidgets.categoryName(detailsController.item.category)
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: Container(
-                      height: Get.height * 0.11,
-                      width: Get.width * 0.25,
-                      child: detailsWidgets.shoppingCart(
-                        (){},
-                        cartController.cart
-                      ),
-                    )
-                  )
-                ],
-              ),
-            ),
-            Obx (() => Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: Get.height - 119,
-                        width: Get.width * 0.6,
-                        child: ListView(
-                          children: [
-                            detailsWidgets.cardSelected(detailsController.item)
-                          ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                width: Get.width,
+                child: Stack( //cabecalho
+                  // mainAxisSize: MainAxisSize.max,
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only( top: 10.0, left: 10.0),
+                      child: detailsWidgets.backButton((){ 
+                        Get.delete<DetailsController>();
+                        Get.back();
+                        //Get.offAndToNamed('/');
+                      }),
+                    ),
+                    Positioned(
+                      top: Get.height * 0.05,
+                      left: Get.width * 0.4,
+                      child: detailsWidgets.categoryName(detailsController.item.category)
+                    ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        height: Get.height * 0.11,
+                        width: Get.width * 0.25,
+                        child: GestureDetector(
+                          onTap: ()=> Get.toNamed('/cart'),
+                          child: Obx(()=> detailsWidgets.shoppingCart(cartController.cart))
                         ),
                       )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 10),
-                  child: SizedBox(
-                    height: Get.height - 119,
-                    width: Get.width * 0.3,
-                    child: ListView.builder(
-                      itemCount: itemController.selectedItems.length,
-                      itemBuilder: (context, index){
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () => detailsController.changeItem(
-                                itemController.selectedItems[index]),
-                              child: detailsWidgets.cardItems(
-                                itemController.selectedItems[index],
-                                itemController.selectedItems[index] == detailsController.item ?
-                                true : false
-                              )
-                            ),
-                            Container(height: 8)
-                          ],
-                        );
-                      }
+              ),
+              Obx (() => Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, left: 10.0),
+                    child: SizedBox(
+                      height: Get.height - 119,
+                      width: Get.width * 0.2,
+                      child: ListView.builder(
+                        itemCount: itemController.selectedItems.length,
+                        itemBuilder: (context, index){
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () => detailsController.changeItem(
+                                  itemController.selectedItems[index]),
+                                child: detailsWidgets.cardItems(
+                                  itemController.selectedItems[index],
+                                  itemController.selectedItems[index] == detailsController.item ?
+                                  true : false
+                                )
+                              ),
+                              Container(height: 10)
+                            ],
+                          );
+                        }
+                      ),
                     ),
                   ),
-                )
-              ],
-            ))
-          ],
+                   Padding(
+                    padding: const EdgeInsets.only(top: 15.0, left: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: Get.height - 119,
+                          width: Get.width * 0.7,
+                          child: ListView(
+                            children: [
+                              detailsWidgets.cardSelected(detailsController.item)
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ))
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Get.theme.accentColor,
+        autofocus: false,
+        onPressed: (){
+          print('pressionado');
+          cartController.add(detailsController.item);
+        }, 
+        child: Icon(Icons.add_shopping_cart, color: Colors.white,),
       ),
     );
   }

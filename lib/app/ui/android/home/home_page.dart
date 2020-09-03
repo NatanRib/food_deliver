@@ -31,7 +31,12 @@ class HomePage extends StatelessWidget {
                   ),
                   Obx(()=> Container(
                     padding: const EdgeInsets.only(top: 10, right: 10),
-                    child: homeWidgets.shoppingChart(cartController.cart),
+                    child: GestureDetector(
+                      onTap: ()=> Get.toNamed('/cart'),
+                      child: homeWidgets.shoppingChart(
+                        cartController.cart
+                      ),
+                    ),
                     height: Get.height * 0.13,
                     width: 100,
                   ))
@@ -98,10 +103,7 @@ class HomePage extends StatelessWidget {
                       itemController.selectedItems.length, 
                       (index) => GestureDetector(
                         onTap: () {
-                          final detailsController = Get.put(DetailsController(
-                            itemController.selectedItems[index]
-                          ));
-                          Get.toNamed('/details', arguments: detailsController);},
+                          Get.toNamed('/details', arguments: itemController.selectedItems[index]);},
                         child: homeWidgets.cardItem(itemController.selectedItems[index]),
                       )
                     ),

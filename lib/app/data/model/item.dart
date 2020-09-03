@@ -6,6 +6,7 @@ class Item{
   double price;
   String category;
   String urlImage;
+  int qtd = 1;
   //img
 
   Item(this.name, this.description, this.price, this.category, this.urlImage);
