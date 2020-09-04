@@ -1,6 +1,6 @@
 # food_delivery
 
-A Flutter project of app delivery.
+A Flutter project from app of food delivery.
 
 ## Getting Started
 
