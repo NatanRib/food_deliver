@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/app/data/model/item.dart';
+import 'package:food_delivery/app/data/repository/cart_repository.dart';
 import 'package:get/get.dart';
+import 'package:food_delivery/app/controller/cart_controller.dart';
 
 class ShoppingCartWidgets{
 
-  Widget cardItem(Item i){
+  final cartController = Get.put(CartController(repository: CartRepository()));
+
+  Widget cartItem(Item i){
     return Container(
       width: Get.width,
       height: 60,
@@ -35,9 +39,9 @@ class ShoppingCartWidgets{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(i.name,
+                  Text(i.name + ' - ${i.qtd}x',
                     style: TextStyle(
-                      color: Get.theme.primaryColor,
+                      color: Colors.grey[800],
                       fontWeight: FontWeight.bold
                     ),
                   ),
@@ -46,53 +50,6 @@ class ShoppingCartWidgets{
               ),
             ),
           ),
-        Positioned(
-          right: 5,
-          top: 5,
-          child: Container(
-            child: Align(
-              alignment: Alignment.centerRight,
-                child:  Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      child: RaisedButton(
-                        elevation: 10,
-                        color: Colors.black,
-                        onPressed: (){},
-                        child: Text('+', style: TextStyle(fontSize: 22, color: Get.theme.primaryColor),),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                      child: Text(i.qtd.toString(),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Get.theme.primaryColor,
-                        )
-                      ),
-                    ),
-                    Container(
-                      width: 40,
-                      child: RaisedButton(
-                        elevation: 10,
-                        color: Get.theme.primaryColor,
-                        onPressed: (){},
-                        child: Text('-', style: TextStyle(fontSize: 22, color: Colors.black)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                        )
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-         )
         ],
       )       
     );
@@ -159,7 +116,11 @@ class ShoppingCartWidgets{
                     borderRadius: BorderRadius.circular(20)
                   ),
                   color: Colors.white,
-                  onPressed: ()=> Get.back(), 
+                  onPressed: (){ 
+                    cartController.cartEnd = false;
+                    cartController.cartStart=!cartController.cartStart;
+                    cartController.cartFinal= true;
+                  },
                   child: Center(
                     child: Icon(
                       Icons.arrow_back_ios,
@@ -191,4 +152,62 @@ class ShoppingCartWidgets{
       ],
     );
   }
+
+  Widget cart(){
+    return Obx(()=> Material(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20)
+      ),
+      elevation: 5,
+      child: AnimatedContainer(
+        curve: Curves.easeInCubic,
+        onEnd: (){
+          cartController.cartFinal ? cartController.cartEnd=false : cartController.cartEnd=true;
+          cartController.cartFinal = false;
+        },
+        duration: Duration(milliseconds: 700),
+        decoration: BoxDecoration(
+          color: cartController.cartStart ? Colors.orangeAccent[200] : Get.theme.accentColor,
+          borderRadius: BorderRadius.circular(20)
+        ),
+        padding: const EdgeInsets.only(left: 10.0, top: 3.0, right: 10.0, bottom: 3.0),
+        height: cartController.cartStart ? Get.height * 0.90 : 0,
+        width: cartController.cartStart ? Get.width * 0.94 : 0,
+        child: cartController.cartEnd ? Column(
+          children: [
+            cartController.cart.items == null ?
+              Container() :
+                Expanded(
+                  flex: 7,
+                  child: Container(
+                    // height: Get.height *0.7,
+                    // width: Get.width,
+                    child: ListView.builder(
+                      itemCount: cartController.cart.items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return  cartItem(cartController.cart.items[index]);
+                      },
+                    ),
+                  ),
+                ),
+            Expanded(
+              flex: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(top : 10.0, bottom: 10),
+                child: deliveryService(10.00),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 5.0),
+                child: checkOut(cartController.totalOrder()),
+              ),
+            ),
+          ]
+        ) : Container(),
+      ),
+    ));
+  }
+
 }

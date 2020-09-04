@@ -10,4 +10,7 @@ class Item{
   //img
 
   Item(this.name, this.description, this.price, this.category, this.urlImage);
+  Item.none();
+
+
 }

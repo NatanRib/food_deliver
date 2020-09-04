@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/app/controller/details_controller.dart';
 import 'package:food_delivery/app/data/model/cart.dart';
 import 'package:food_delivery/app/data/model/item.dart';
 import 'package:get/get.dart';
@@ -63,20 +64,69 @@ class DetailsWidgets{
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Image(
-            image: AssetImage(i.urlImage),
-            alignment: Alignment.center,
-            height: Get.height/1.8,
-          ),//imagem of item,
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(i.name,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold
-              ),
+          Expanded(
+            flex: 6,
+            child: Image(
+              image: AssetImage(i.urlImage),
+              alignment: Alignment.center,
+              height: Get.height/1.8,
             ),
           ),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(i.name,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    child: RaisedButton(
+                      elevation: 5,
+                      color: Colors.black,
+                      onPressed: ()=> i.qtd ++,
+                      child: Text('+', 
+                        style: TextStyle(fontSize: 22,color: Get.theme.primaryColor),),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                    child: Text(i.qtd.toString(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      )
+                    ),
+                  ),
+                  Container(
+                    width: 40,
+                    child: RaisedButton(
+                      elevation: 5,
+                      color: Get.theme.accentColor,
+                      onPressed: ()=> i.qtd --,
+                      child: Text('-', style: TextStyle(fontSize: 22, color: Colors.black)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      )
+                    ),
+                  ),
+                ],
+              ))
+            ],
+          ),//imagem of item,
           Padding(
             padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
             child: Align(

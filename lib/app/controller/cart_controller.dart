@@ -13,6 +13,17 @@ class CartController extends GetxController {
   set cart(value) => this._cart.value = value;
   get cart => this._cart.value;
 
+  
+  final _cartEnd = false.obs;
+  final _cartStart = false.obs;
+  final _cartFinal = false.obs;
+  set cartEnd(value) => this._cartEnd.value = value;
+  get cartEnd => this._cartEnd.value;
+  set cartStart(value) => this._cartStart.value = value;
+  get cartStart => this._cartStart.value;
+  set cartFinal(value) => this._cartFinal.value = value;
+  get cartFinal => this._cartFinal.value;
+
   onInit(){
     getCart();
   }
@@ -35,7 +46,7 @@ class CartController extends GetxController {
   }
 
   totalOrder(){
-    double total = 0.0;
+    double total = 10.0;
 
     for (var item in cart.items){
       total += item.price;
