@@ -8,23 +8,22 @@ class CategoryController extends GetxController {
 final CategoryRepository repository;
 CategoryController({@required this.repository}) : assert(repository != null);
 
-  final _cats = List<Category>().obs;
-  set categories(value) => this._cats.value = value;
-  get categories => this._cats.value;
+  var categories = List<Category>();
 
-  final _selectedCat = 'Burguer'.obs;
-  set selectedcategory(value) => this._selectedCat.value = value;
-  get selectedcategory => this._selectedCat.value;
+  var selectedCategory = 'Burguer';
 
   onInit(){
     getAll();
+    update();
   }
 
   changeCategory(String cat){
-    selectedcategory = cat;
+    selectedCategory = cat;
+    update();
   }
 
   getAll(){
     categories = repository.getAll();
+    update();
   }
 }

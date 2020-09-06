@@ -116,11 +116,9 @@ class ShoppingCartWidgets{
                     borderRadius: BorderRadius.circular(20)
                   ),
                   color: Colors.white,
-                  onPressed: (){ 
-                    cartController.cartEnd = false;
-                    cartController.cartStart=!cartController.cartStart;
-                    cartController.cartFinal= true;
-                  },
+                  onPressed: (){
+                    print('fechando carrinho');
+                    cartController.closeCart();},
                   child: Center(
                     child: Icon(
                       Icons.arrow_back_ios,
@@ -153,16 +151,16 @@ class ShoppingCartWidgets{
     );
   }
 
-  Widget cart(){
-    return Obx(()=> Material(
+  Widget cart(double total){
+    return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
       ),
       elevation: 5,
-      child: AnimatedContainer(
+      child:  AnimatedContainer(
         curve: Curves.easeInCubic,
         onEnd: (){
-          cartController.cartFinal ? cartController.cartEnd=false : cartController.cartEnd=true;
+          cartController.cartFinal ? cartController.cartEnd=false : cartController.cartEnd =true;
           cartController.cartFinal = false;
         },
         duration: Duration(milliseconds: 700),
@@ -185,7 +183,7 @@ class ShoppingCartWidgets{
                     child: ListView.builder(
                       itemCount: cartController.cart.items.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return  cartItem(cartController.cart.items[index]);
+                        return cartItem(cartController.cart.items[index]);
                       },
                     ),
                   ),
@@ -201,13 +199,13 @@ class ShoppingCartWidgets{
               flex: 1,
               child: Container(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: checkOut(cartController.totalOrder()),
+                child: checkOut(total)
               ),
             ),
           ]
         ) : Container(),
       ),
-    ));
+    );
   }
 
 }

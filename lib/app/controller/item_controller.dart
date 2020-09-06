@@ -8,21 +8,19 @@ class ItemController extends GetxController {
 final ItemRepository repository;
 ItemController({@required this.repository}) : assert(repository != null);
 
-  final _items = List<Item>().obs;
-  set items(value) => this._items.value = value;
-  get items => this._items.value;
+  var items = List<Item>();
 
-  final _selectedItems = List<Item>().obs;
-  set selectedItems(value) => this._selectedItems.value = value;
-  get selectedItems => this._selectedItems.value;
+  var selectedItems = List<Item>();
 
   onInit(){
     getAll();
     getByCategory('Burguer');
+    update();
   }
 
   getAll(){
     items = repository.getAll();
+    update();
   }
 
   getByCategory(String cat){
@@ -35,5 +33,6 @@ ItemController({@required this.repository}) : assert(repository != null);
       }
     }
     selectedItems = its;
+    update();
   }
 }

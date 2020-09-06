@@ -6,10 +6,10 @@ class Item{
   double price;
   String category;
   String urlImage;
-  int qtd = 1;
+  int qtd;
   //img
 
-  Item(this.name, this.description, this.price, this.category, this.urlImage);
+  Item({this.name, this.description, this.price, this.category, this.urlImage, this.qtd = 1});
   Item.none();
 
 

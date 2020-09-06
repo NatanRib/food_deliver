@@ -8,20 +8,40 @@ DetailsController(this.i);
 
   Item i;
 
-  final _item = Object().obs;
-  set item(value) => this._item.value = value;
-  get item => this._item.value;
+  var item = Item();
 
   onInit(){
     getItem(i);
+    update();
   }
 
   getItem(Item item){
     this.item = item;
+    update();
+  }
+
+  increaseQtd(){
+    if(item.qtd < 10){
+      item.qtd ++;
+      update();
+    }
+  }
+
+  decreaseQtd(){
+    if (item.qtd > 1){
+      item.qtd --;
+      update();
+    }
+  }
+
+  resetQtd(){
+    i.qtd = 1;
+    update();
   }
 
   changeItem(Item i){
     print('trocando items');
     item = i;
+    update();
   }
 }

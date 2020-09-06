@@ -5,7 +5,7 @@ import 'package:food_delivery/app/data/model/item.dart';
 import 'package:get/get.dart';
 
 class HomeWidgets {
-  Widget shoppingChart(Cart c) {
+  Widget shoppingChart(int numberOfItens) {
     return Container(
       decoration: BoxDecoration(
           color: Get.theme.accentColor,
@@ -18,12 +18,12 @@ class HomeWidgets {
             Icons.shopping_cart,
             color: Get.theme.primaryColor,
           ),
-          c.items == null
+           numberOfItens == null
               ? Container()
-              : c.items.length <= 0
+              : numberOfItens <= 0
                   ? Container()
                   : Text(
-                      c.items.length.toString(),
+                      numberOfItens.toString(),
                       style: TextStyle(color: Get.theme.primaryColor),
                     )
         ],
@@ -60,7 +60,7 @@ class HomeWidgets {
     );
   }
 
-  Widget cardIcon(Category cat /*IconData icon*/, bool selected) {
+  Widget cardIcon(String nameOfCategory /*IconData icon*/, bool selected) {
     return Container(
       height: 70,
       width: 100,
@@ -70,7 +70,7 @@ class HomeWidgets {
         borderRadius: BorderRadius.circular(20),
         child: Center(
           child: Text(
-            cat.name,
+            nameOfCategory,
             style: TextStyle(color: selected ? Colors.white : Colors.black),
           ),
         ),

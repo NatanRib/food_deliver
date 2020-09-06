@@ -24,7 +24,7 @@ class DetailsWidgets{
     );
   }
 
-  Widget shoppingCart(Cart cart){
+  Widget shoppingCart(int numberOfItems){
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -36,13 +36,13 @@ class DetailsWidgets{
           Icon(Icons.shopping_cart,
             color: Colors.white,
           ),
-          cart.items == null?
+          numberOfItems == null?
             Container() :
-            cart.items.length <= 0 ?
+            numberOfItems <= 0 ?
             Container() :
           Padding(
             padding: const EdgeInsets.only(left: 5.0),
-            child: Text(cart.items.length.toString(),
+            child: Text(numberOfItems.toString(),
               style: TextStyle(
                 color: Colors.white
               ),
@@ -53,7 +53,7 @@ class DetailsWidgets{
     );
   }
 
-  Widget cardSelected(Item i){
+  Widget cardSelected(Item i, Function increase, Function decrease){
     return Container(
       width: Get.width / 2,
       height: 
@@ -93,7 +93,7 @@ class DetailsWidgets{
                     child: RaisedButton(
                       elevation: 5,
                       color: Colors.black,
-                      onPressed: ()=> i.qtd ++,
+                      onPressed: increase,
                       child: Text('+', 
                         style: TextStyle(fontSize: 22,color: Get.theme.primaryColor),),
                       shape: RoundedRectangleBorder(
@@ -103,7 +103,7 @@ class DetailsWidgets{
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                    child: Text(i.qtd.toString(),
+                    child:  Text(i.qtd.toString(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -116,7 +116,7 @@ class DetailsWidgets{
                     child: RaisedButton(
                       elevation: 5,
                       color: Get.theme.accentColor,
-                      onPressed: ()=> i.qtd --,
+                      onPressed: decrease,
                       child: Text('-', style: TextStyle(fontSize: 22, color: Colors.black)),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)

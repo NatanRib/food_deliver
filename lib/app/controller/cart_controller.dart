@@ -9,20 +9,17 @@ class CartController extends GetxController {
   final CartRepository repository;
   CartController({@required this.repository}) : assert(repository != null);
 
-  final _cart = Cart().obs;
-  set cart(value) => this._cart.value = value;
-  get cart => this._cart.value;
-
+  var cart = Cart();
   
   final _cartEnd = false.obs;
+  get cartEnd => _cartEnd.value; 
+  set cartEnd(value) => _cartEnd.value = value;
   final _cartStart = false.obs;
+  get cartStart => _cartStart.value; 
+  set cartStart(value) => _cartStart.value = value;
   final _cartFinal = false.obs;
-  set cartEnd(value) => this._cartEnd.value = value;
-  get cartEnd => this._cartEnd.value;
-  set cartStart(value) => this._cartStart.value = value;
-  get cartStart => this._cartStart.value;
-  set cartFinal(value) => this._cartFinal.value = value;
-  get cartFinal => this._cartFinal.value;
+  get cartFinal => _cartFinal.value; 
+  set cartFinal(value) => _cartFinal.value = value;
 
   onInit(){
     getCart();
@@ -31,18 +28,24 @@ class CartController extends GetxController {
   getCart(){
     cart = repository.getAll();
     print(cart.items.length);
+    update();
   }
 
-  addOne(i){
-    int index = cart.items.indexOf(i);
-    repository.addOne(index);
-    getCart();  
+  addOne(Item i){
+    if (cart.items.indexOf(i)== -1){
+      Item item = Item(
+        name: i.name, description: i.description, price: i.price,
+         category: i.category, urlImage: i.urlImage, qtd: i.qtd);
+      cart.items.add(item);
+      update();
+    } 
   }
 
   removeOne(i){
-    int index = cart.items.indexOf(i);
-    repository.removeOne(index);
-    getCart();  
+    if(cart.items.indexOf(i) != -1){
+      cart.items.remove(i);
+      update();
+    }
   }
 
   totalOrder(){
@@ -55,9 +58,11 @@ class CartController extends GetxController {
     return total; 
   }
 
-  add(Item i){
-    cart = repository.add(i);
-    getCart();
+  closeCart(){
+    cartEnd = false;
+    cartStart = !cartStart;
+    cartFinal = true;
+    print('back cart');
   }
-  
+
 }
