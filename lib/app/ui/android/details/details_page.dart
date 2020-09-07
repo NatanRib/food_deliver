@@ -22,65 +22,69 @@ class DetaisPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('update');
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Obx(()=> Stack(
-            children: [
-              Positioned(//CARRINHO, A PRINCIPIO ESCONDIDO
-                top: cartController.cartFinal? 15 : 10,
-                right: cartController.cartFinal? 15 :  10,
-                child: ShoppingCartWidgets().cart(cartController.totalOrder())
-              ),
-              AnimatedOpacity(
-                curve: Curves.easeOut,
-                duration: Duration(milliseconds: 200),
-                opacity: cartController.cartFinal ? 0 : cartController.cartStart ? 0 : 1,
-                child: IgnorePointer(
-                  ignoring: cartController.cartStart,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: Get.width,
-                        child: Stack( //CABEÇALHO
-                          // mainAxisSize: MainAxisSize.max,
-                          // mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(//BOTÃO VOLTAR
-                              padding: const EdgeInsets.only( top: 10.0, left: 10.0),
-                              child: detailsWidgets.backButton((){ 
-                                Get.delete<DetailsController>();
-                                Get.offNamed('/');
-                              }),
-                            ),
-                            Positioned(//NOME CATEGORIA
-                              top: Get.height * 0.05,
-                              left: Get.width * 0.4,
-                              child: detailsWidgets.categoryName(detailsController.item.category)
-                            ),
-                            Positioned(//BOTAO CARRINHO
-                              top: 10,
-                              right: 10,
-                              child: Container(
-                                height: Get.height * 0.11,
-                                width: Get.width * 0.25,
-                                child: GestureDetector(
-                                  onTap: ()=> cartController.cartStart= !cartController.cartStart,
-                                  child: GetBuilder<CartController>(builder: (_)=> detailsWidgets.shoppingCart(cartController.cart.items.length))
-                                ),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, contraints){
+            print('heigth: ${contraints.maxHeight} width: ${contraints.maxWidth}');
+            return Obx(()=> Stack(
+              children: [
+                Positioned(   //CARRINHO, A PRINCIPIO ESCONDIDO
+                  top: cartController.cartFinal? 15 : 10,
+                  right: cartController.cartFinal? 15 :  10,
+                  child: ShoppingCartWidgets().cart()
+                ),
+                AnimatedOpacity(
+                  curve: Curves.easeOut,
+                  duration: Duration(milliseconds: 500),
+                  opacity: cartController.cartFinal ? 0 : cartController.cartStart ? 0 : 1,
+                  child: IgnorePointer(
+                    ignoring: cartController.cartStart,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: contraints.maxHeight * 0.13,
+                          width: contraints.maxWidth,
+                          child: Stack(   //CABEÇALHO
+                            // mainAxisSize: MainAxisSize.max,
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(    //BOTÃO VOLTAR
+                                padding: const EdgeInsets.only( top: 10.0, left: 10.0),
+                                width: contraints.maxWidth * 0.24,
+                                height: contraints.maxHeight * 0.14,
+                                child: detailsWidgets.backButton((){ 
+                                  Get.delete<DetailsController>();
+                                  Get.offNamed('/');
+                                }),
+                              ),
+                              Positioned(   //NOME CATEGORIA
+                                top: contraints.maxHeight * 0.05,
+                                left: contraints.maxWidth * 0.4,
+                                child: detailsWidgets.categoryName(detailsController.item.category)
+                              ),
+                              Positioned(   //BOTAO CARRINHO
+                                top: 10,
+                                right: 10,
+                                child: Container(
+                                  height: contraints.maxHeight * 0.11,
+                                  width: contraints.maxWidth * 0.25,
+                                  child: GestureDetector(
+                                    onTap: ()=> cartController.cartStart= !cartController.cartStart,
+                                    child: GetBuilder<CartController>(builder: (_)=> detailsWidgets.shoppingCart(cartController.cart.items.length))
+                                  ),
+                                )
                               )
-                            )
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Row( //corpo da pagina
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15, left: 10.0),
-                            child: SizedBox(
-                              height: Get.height - 119,
-                              width: Get.width * 0.2,
+                        Row(    //CORPO DA PAGINA
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(top: 15, left: 10),
+                              height: contraints.maxHeight * 0.87,
+                              width: Get.width * 0.23,
                               child: GetBuilder<ItemController>(
-                                builder: (_)=> ListView.builder( //OUTROS ITENS DESSA CATEGORIA
+                                builder: (_)=> ListView.builder( 
                                   itemCount: _.selectedItems.length,
                                   itemBuilder: (context, index){
                                     return Column(
@@ -90,52 +94,52 @@ class DetaisPage extends StatelessWidget {
                                             itemController.selectedItems[index]);
                                           },
                                           child: GetBuilder<DetailsController>(
-                                            builder: (_)=> detailsWidgets.cardItems(
-                                            itemController.selectedItems[index],
-                                            itemController.selectedItems[index] == _.item ?
-                                            true : false
-                                          ))
+                                            builder: (_)=> Container(
+                                              height: contraints.maxHeight * 0.12,
+                                              child: detailsWidgets.cardOtherItems(
+                                                itemController.selectedItems[index],
+                                                itemController.selectedItems[index] == _.item ?
+                                                true : false
+                                          ),
+                                            ))
                                         ),
-                                        Container(height: 10)
+                                        Container(height: contraints.maxHeight * 0.017)
                                       ],
                                     );
                                   }
                                 )
                               ),
                             ),
-                          ),
-                          Padding(//ITEM SELECIONADO
-                            padding: const EdgeInsets.only(top: 15.0, left: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  height: Get.height - 119,
-                                  width: Get.width * 0.7,
-                                  child: ListView(//card do item selecionado
-                                    children: [
-                                      GetBuilder<DetailsController>(
-                                        builder: (_)=> detailsWidgets.cardSelected(
-                                          detailsController.item,
-                                          ()=> detailsController.increaseQtd(),
-                                          ()=> detailsController.decreaseQtd()
-                                        )
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+                            Container(    //ITEM SELECIONADO
+                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              height: contraints.maxHeight * 0.87,
+                              width: contraints.maxWidth * 0.77,
+                              child: ListView(    
+                                children: [
+                                  GetBuilder<DetailsController>(
+                                    builder: (_)=> Container(
+                                      height: contraints.maxHeight * 0.9,
+                                      width: contraints.maxWidth * 0.8,
+                                      child: detailsWidgets.cardSelected(
+                                        detailsController.item,
+                                        ()=> detailsController.increaseQtd(),
+                                        ()=> detailsController.decreaseQtd()
+                                      ),
+                                    )
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ]
-          )),
-        ),
+              ]
+            )
+          );
+        }),
       ),
       floatingActionButton: Obx(()=> cartController.cartFinal ? Container():
        cartController.cartStart ? Container() : FloatingActionButton(

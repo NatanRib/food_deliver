@@ -62,11 +62,11 @@ class HomeWidgets {
 
   Widget cardIcon(String nameOfCategory /*IconData icon*/, bool selected) {
     return Container(
-      height: 70,
-      width: 100,
+      // height: 70,
+      width: Get.width * 0.3,
       child: Material(
         color: selected ? Colors.black : Get.theme.backgroundColor,
-        elevation: selected ? 7 : 0,
+        elevation: selected ? 10 : 0,
         borderRadius: BorderRadius.circular(20),
         child: Center(
           child: Text(
@@ -92,24 +92,25 @@ class HomeWidgets {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Get.theme.backgroundColor),
-      height: 130,
-      width: 80,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               i.name,
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
-            Image(
-              image: AssetImage(i.urlImage),
-              height: 100,
-              alignment: Alignment.center,
+            Hero(
+              tag: '${i.urlImage} + ${i.name}',
+              child: Image(
+                image: AssetImage(i.urlImage),
+                height: 100,
+                alignment: Alignment.center,
+              ),
             ),
             Text(
-              'R\$ ' + i.price.toString(),
-              style: TextStyle(color: Get.theme.accentColor),
+              'R\$ ' + i.price.toStringAsFixed(2),
+              style: TextStyle(color: Get.theme.accentColor, fontSize: 16),
             )
           ]),
     );

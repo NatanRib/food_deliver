@@ -8,7 +8,7 @@ class CartRepository {
 
 //ChartRepository({@required this.apiClient}) : assert(apiClient != null);
 
-  Cart _cart = Cart();
+  Cart _cart = Cart(frete: 10.0);
 
   add(Item i){
     _cart.items.add(i);

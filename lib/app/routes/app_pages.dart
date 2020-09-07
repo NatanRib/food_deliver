@@ -6,7 +6,7 @@ part './app_routes.dart';
 abstract class AppPages {
 
   static final pages = [
-    GetPage(name: Routes.INITIAL, page:()=> HomePage(),),
-    GetPage(name: Routes.DETAILS, page: ()=> DetaisPage()),
+    GetPage(name: Routes.INITIAL, page:()=> HomePage(), transitionDuration: const Duration(milliseconds: 500)),
+    GetPage(name: Routes.DETAILS, page: ()=> DetaisPage(), transitionDuration: const Duration(milliseconds: 500)),
   ];
 }

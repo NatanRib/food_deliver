@@ -8,8 +8,8 @@ class DetailsWidgets{
 
   Widget backButton(Function f){
     return Container(
-      height: 70,
-      width: 70,
+      // height: 70,
+      // width: 70,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
@@ -55,24 +55,24 @@ class DetailsWidgets{
 
   Widget cardSelected(Item i, Function increase, Function decrease){
     return Container(
-      width: Get.width / 2,
-      height: 
-        i.name.length > 15 ? //nao pode ser mais que 30, definir na api ou no cliente de cadastro de items
-        Get.height/1.46 + (i.description.length / 20) * 25 + 20:
-        Get.height/1.46 + (i.description.length / 20) * 25,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
             flex: 6,
-            child: Image(
-              image: AssetImage(i.urlImage),
-              alignment: Alignment.center,
-              height: Get.height/1.8,
+            child: Hero(
+              tag: '${i.urlImage} + ${i.name}',
+              child: Image(
+                image: AssetImage(i.urlImage),
+                alignment: Alignment.center,
+                height: Get.height/1.8,
+              ),
             ),
           ),
           Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Expanded(
                 flex: 1,
@@ -88,8 +88,8 @@ class DetailsWidgets{
               ),
               Expanded(child: Row(
                 children: [
-                  Container(
-                    width: 40,
+                  Container(    //BOTAO AUMENTA QUANTIDADE
+                    width: Get.width * 0.13,
                     child: RaisedButton(
                       elevation: 5,
                       color: Colors.black,
@@ -101,7 +101,7 @@ class DetailsWidgets{
                       ),
                     ),
                   ),
-                  Padding(
+                  Padding(    //QUANTIDADE
                     padding: const EdgeInsets.only(left: 3.0, right: 3.0),
                     child:  Text(i.qtd.toString(),
                       style: TextStyle(
@@ -111,8 +111,8 @@ class DetailsWidgets{
                       )
                     ),
                   ),
-                  Container(
-                    width: 40,
+                  Container(    //BOTAO DEMINUI QUANTIDADE
+                    width: Get.width * 0.13,
                     child: RaisedButton(
                       elevation: 5,
                       color: Get.theme.accentColor,
@@ -131,7 +131,7 @@ class DetailsWidgets{
             padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('R\$ ' + i.price.toString(),
+              child: Text('R\$ ' + i.price.toStringAsFixed(2),
                 style: TextStyle(
                   fontSize: 18,
                   color: Get.theme.accentColor,
@@ -163,10 +163,8 @@ class DetailsWidgets{
     );
   }
 
-  Widget cardItems(Item i, bool selected){
+  Widget cardOtherItems(Item i, bool selected){
     return Container(
-      height: 70,
-      width: 70,
       child: Material(
         borderRadius: BorderRadius.circular(20),
         color: selected? Colors.black : Get.theme.backgroundColor,
